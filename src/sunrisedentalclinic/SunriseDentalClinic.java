@@ -10,9 +10,6 @@ public class SunriseDentalClinic {
 
         Scanner input = new Scanner(System.in);
 
-        String correctUsername = "admin";
-        String correctPassword = "admin123";
-
         int attempts = 0;
         boolean loginSuccessful = false;
 
@@ -29,9 +26,8 @@ public class SunriseDentalClinic {
             System.out.print("Enter Password: ");
             String password = input.nextLine();
 
-            if (username.equals(correctUsername)
-                    && password.equals(correctPassword)) {
-
+            if (UserDAO.validateLogin(username, password)) {
+            	
                 loginSuccessful = true;
 
                 System.out.println("\nLogin Successful!");
