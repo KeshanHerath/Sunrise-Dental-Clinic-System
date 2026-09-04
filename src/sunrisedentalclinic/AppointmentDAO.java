@@ -53,7 +53,59 @@ public class AppointmentDAO {
                 connection.rollback();
                 return false;
             }
+            
+            String numberCheckSql =
+                    "SELECT appointment_number FROM appointments " +
+                    "WHERE appointment_number = ?";
 
+            try (PreparedStatement numberCheckStatement =
+                    connection.prepareStatement(numberCheckSql)) {
+
+                numberCheckStatement.setString(1, appointmentNumber);
+
+                try (ResultSet numberResult =
+                        numberCheckStatement.executeQuery()) {
+
+                    if (numberResult.next()) {
+                        System.out.println("Appointment number already exists.");
+                        connection.rollback();
+                        return false;
+                    }
+                }
+            }
+            
+            String checkTime = appointmentTime;
+
+            if (checkTime.length() == 5) {
+                checkTime = checkTime + ":00";
+            }
+
+            String checkSql =
+                    "SELECT appointment_number FROM appointments " +
+                    "WHERE dentist_id = ? " +
+                    "AND appointment_date = ? " +
+                    "AND appointment_time = ?";
+
+            try (PreparedStatement checkStatement =
+                    connection.prepareStatement(checkSql)) {
+
+                checkStatement.setInt(1, dentistId);
+                checkStatement.setDate(
+                        2, Date.valueOf(appointmentDate));
+                checkStatement.setTime(
+                        3, Time.valueOf(checkTime));
+
+                try (ResultSet checkResult =
+                        checkStatement.executeQuery()) {
+
+                    if (checkResult.next()) {
+                        System.out.println(
+                                "This dentist is already booked at that date and time.");
+                        connection.rollback();
+                        return false;
+                    }
+                }
+            }
             // Insert patient
             String patientSql =
                     "INSERT INTO patients "

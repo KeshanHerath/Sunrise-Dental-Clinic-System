@@ -2,6 +2,9 @@ package sunrisedentalclinic;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 public class SunriseDentalClinic {
 	static ArrayList<String> appointments = new ArrayList<String>();
@@ -124,53 +127,42 @@ public class SunriseDentalClinic {
     }
     
     private static void calculateBill(Scanner input) {
+
+        System.out.println("\n========================================");
+        System.out.println("          CALCULATE PATIENT BILL");
+        System.out.println("========================================");
+
+        System.out.print("Enter Appointment Number: ");
+        String appointmentNumber = input.nextLine();
+
+        double consultationFee = 2000.00;
+
+        String[] bill = BillDAO.generateBill(
+                appointmentNumber,
+                consultationFee
+        );
+
+        if (bill == null) {
+            System.out.println("Bill could not be generated.");
+            return;
+        }
+
+        System.out.println("\n========================================");
+        System.out.println("            PATIENT BILL");
+        System.out.println("========================================");
+
+        System.out.println("Appointment Number : " + bill[0]);
+        System.out.println("Patient Name       : " + bill[1]);
+        System.out.println("Treatment Type     : " + bill[2]);
+        System.out.println("Consultation Fee   : Rs. " + bill[3]);
+        System.out.println("Treatment Cost     : Rs. " + bill[4]);
+        System.out.println("----------------------------------------");
+        System.out.println("Total Amount       : Rs. " + bill[5]);
+
+        System.out.println("========================================");
+    }
+    
     	
-    	System.out.println("\n========================================");
-    	System.out.println("          CALCULATE PATIENT BILL");
-    	System.out.println("========================================");
-
-    	System.out.print("Enter Appointment Number: ");
-    	String searchNumber = input.nextLine();
-
-    	String[] patientDetails = null;
-
-    	for (String appointment : appointments) {
-
-    	    String[] details = appointment.split("\\|");
-
-    	    if (details[0].equals(searchNumber)) {
-    	        patientDetails = details;
-    	        break;
-    	    }
-    	}
-
-    	if (patientDetails == null) {
-    	    System.out.println("Appointment not found.");
-    	    return;
-    	}
-    	
-    	double consultationFee = 2000.00;
-    	double treatmentCost = 0.00;
-
-    	String treatmentType = patientDetails[5];
-
-    	if (treatmentType.equalsIgnoreCase("filling")) {
-    	    treatmentCost = 5000.00;
-
-    	} else if (treatmentType.equalsIgnoreCase("cleaning")) {
-    	    treatmentCost = 3500.00;
-
-    	} else if (treatmentType.equalsIgnoreCase("extraction")) {
-    	    treatmentCost = 6000.00;
-
-    	} else if (treatmentType.equalsIgnoreCase("root canal")) {
-    	    treatmentCost = 15000.00;
-
-    	} else {
-    	    treatmentCost = 4000.00;
-    	}
-	}
-
 
 	public static void registerAppointment(Scanner input) {
 
@@ -201,6 +193,40 @@ public class SunriseDentalClinic {
 
         System.out.print("Appointment Time   : ");
         String appointmentTime = input.nextLine();
+        
+        if (appointmentNumber.trim().isEmpty() ||
+        	    patientName.trim().isEmpty() ||
+        	    address.trim().isEmpty() ||
+        	    contactNumber.trim().isEmpty() ||
+        	    dentistName.trim().isEmpty() ||
+        	    treatmentType.trim().isEmpty() ||
+        	    appointmentDate.trim().isEmpty() ||
+        	    appointmentTime.trim().isEmpty()) {
+
+        	    System.out.println("\nAll fields are required.");
+        	    System.out.println("Appointment could not be registered.");
+        	    return;
+        	}
+        
+        try {
+            LocalDate.parse(appointmentDate);
+            LocalTime.parse(appointmentTime);
+
+        } catch (DateTimeParseException e) {
+
+            System.out.println("\nInvalid date or time format.");
+            System.out.println("Use date format: YYYY-MM-DD");
+            System.out.println("Use time format: HH:MM");
+            System.out.println("Appointment could not be registered.");
+            return;
+        }
+        
+        if (!contactNumber.matches("\\d{10}")) {
+            System.out.println("\nInvalid contact number.");
+            System.out.println("Contact number must contain exactly 10 digits.");
+            System.out.println("Appointment could not be registered.");
+            return;
+        } 
         
         boolean saved = AppointmentDAO.saveAppointment(
                 appointmentNumber,
