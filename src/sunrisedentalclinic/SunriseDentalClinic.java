@@ -243,40 +243,31 @@ public class SunriseDentalClinic {
         System.out.println("Appointment Time   : " + appointmentTime);
     }
     
-    private static void displayAppointment(Scanner input) {
+	private static void displayAppointment(Scanner input) {
 
-        System.out.println("\n========================================");
-        System.out.println("      DISPLAY APPOINTMENT DETAILS");
-        System.out.println("========================================");
+	    System.out.println("\n========================================");
+	    System.out.println("        DISPLAY APPOINTMENT DETAILS");
+	    System.out.println("========================================");
 
-        System.out.print("Enter Appointment Number: ");
-        String searchNumber = input.nextLine();
+	    System.out.print("Enter Appointment Number: ");
+	    String searchNumber = input.nextLine();
 
-        boolean found = false;
+	    String[] details = AppointmentDAO.findAppointment(searchNumber);
 
-        for (String appointment : appointments) {
+	    if (details == null) {
+	        System.out.println("Appointment not found.");
+	        return;
+	    }
 
-            String[] details = appointment.split("\\|");
-
-            if (details[0].equals(searchNumber)) {
-
-                System.out.println("\nAppointment Found!");
-                System.out.println("Appointment Number : " + details[0]);
-                System.out.println("Patient Name       : " + details[1]);
-                System.out.println("Address            : " + details[2]);
-                System.out.println("Contact Number     : " + details[3]);
-                System.out.println("Dentist Name       : " + details[4]);
-                System.out.println("Treatment Type     : " + details[5]);
-                System.out.println("Appointment Date   : " + details[6]);
-                System.out.println("Appointment Time   : " + details[7]);
-
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            System.out.println("Appointment not found.");
-        }
-    }
+	    System.out.println("\nAppointment Found!");
+	    System.out.println("Appointment Number : " + details[0]);
+	    System.out.println("Patient Name       : " + details[1]);
+	    System.out.println("Address            : " + details[2]);
+	    System.out.println("Contact Number     : " + details[3]);
+	    System.out.println("Dentist Name       : " + details[4]);
+	    System.out.println("Treatment Type     : " + details[5]);
+	    System.out.println("Appointment Date   : " + details[6]);
+	    System.out.println("Appointment Time   : " + details[7]);
+	    System.out.println("Status             : " + details[8]);
+	}
 }

@@ -217,4 +217,49 @@ public class AppointmentDAO {
 
         return -1;
     }
+    public static String[] findAppointment(String appointmentNumber) {
+
+        String sql =
+                "SELECT a.appointment_number, " +
+                "p.patient_name, p.address, p.contact_number, " +
+                "d.dentist_name, t.treatment_type, " +
+                "a.appointment_date, a.appointment_time, a.status " +
+                "FROM appointments a " +
+                "JOIN patients p ON a.patient_id = p.patient_id " +
+                "JOIN dentists d ON a.dentist_id = d.dentist_id " +
+                "JOIN treatments t ON a.treatment_id = t.treatment_id " +
+                "WHERE a.appointment_number = ?";
+
+        try (
+            Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, appointmentNumber);
+
+            try (ResultSet result = statement.executeQuery()) {
+
+                if (result.next()) {
+
+                    return new String[] {
+                        result.getString("appointment_number"),
+                        result.getString("patient_name"),
+                        result.getString("address"),
+                        result.getString("contact_number"),
+                        result.getString("dentist_name"),
+                        result.getString("treatment_type"),
+                        result.getString("appointment_date"),
+                        result.getString("appointment_time"),
+                        result.getString("status")
+                    };
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error searching for appointment.");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
