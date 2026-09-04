@@ -5,7 +5,8 @@ import java.util.ArrayList;
 
 public class SunriseDentalClinic {
 	static ArrayList<String> appointments = new ArrayList<String>();
-
+	
+	static String currentUsername;
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
@@ -29,7 +30,8 @@ public class SunriseDentalClinic {
             if (UserDAO.validateLogin(username, password)) {
             	
                 loginSuccessful = true;
-
+                currentUsername = username;
+                   
                 System.out.println("\nLogin Successful!");
                 System.out.println("Welcome to Sunrise Dental Clinic.");
 
@@ -200,6 +202,22 @@ public class SunriseDentalClinic {
         System.out.print("Appointment Time   : ");
         String appointmentTime = input.nextLine();
         
+        boolean saved = AppointmentDAO.saveAppointment(
+                appointmentNumber,
+                patientName,
+                address,
+                contactNumber,
+                dentistName,
+                treatmentType,
+                appointmentDate,
+                appointmentTime,
+                currentUsername
+        );
+
+        if (!saved) {
+            System.out.println("\nAppointment could not be registered.");
+            return;
+        }
         String appointmentData = appointmentNumber + "|" +
                 patientName + "|" +
                 address + "|" +
