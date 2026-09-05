@@ -105,9 +105,44 @@ public class SunriseDentalClinic {
                     break;
 
                 case 4:
-                    System.out.println(
-                        "\nHelp selected."
-                    );
+
+                    System.out.println("\n========================================");
+                    System.out.println("              HELP SECTION");
+                    System.out.println("========================================");
+
+                    System.out.println("\n1. LOGIN");
+                    System.out.println("   - Start the Sunrise Dental Clinic system.");
+                    System.out.println("   - Enter your authorized username and password.");
+                    System.out.println("   - You have a maximum of 3 login attempts.");
+
+                    System.out.println("\n2. REGISTER NEW APPOINTMENT");
+                    System.out.println("   - Select option 1 from the Main Menu.");
+                    System.out.println("   - Enter a unique appointment number.");
+                    System.out.println("   - Enter the patient name and address.");
+                    System.out.println("   - Enter a 10-digit contact number.");
+                    System.out.println("   - Enter the dentist name and treatment type.");
+                    System.out.println("   - Use date format: YYYY-MM-DD.");
+                    System.out.println("   - Use time format: HH:MM.");
+                    System.out.println("   - The same dentist cannot be booked at the same date and time.");
+
+                    System.out.println("\n3. DISPLAY APPOINTMENT DETAILS");
+                    System.out.println("   - Select option 2 from the Main Menu.");
+                    System.out.println("   - Enter the appointment number.");
+                    System.out.println("   - The complete appointment details will be displayed.");
+
+                    System.out.println("\n4. CALCULATE AND PRINT BILL");
+                    System.out.println("   - Select option 3 from the Main Menu.");
+                    System.out.println("   - Enter the appointment number.");
+                    System.out.println("   - The system calculates the treatment cost,");
+                    System.out.println("     consultation fee and total amount.");
+                    System.out.println("   - The bill is also stored in the database.");
+
+                    System.out.println("\n5. EXIT SYSTEM");
+                    System.out.println("   - Select option 5 from the Main Menu.");
+                    System.out.println("   - The application will close safely.");
+
+                    System.out.println("\n========================================");
+
                     break;
 
                 case 5:
